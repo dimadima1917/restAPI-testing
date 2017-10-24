@@ -1,11 +1,12 @@
 package com.akvelon.controllers;
 
 import com.akvelon.domain.User;
+import com.akvelon.service.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by Димон on 23.10.2017.
@@ -13,11 +14,11 @@ import java.util.concurrent.atomic.AtomicLong;
 @RestController
 public class UserController {
 
-    private static final String template = "Hello, %s!";
-    private final AtomicLong counter = new AtomicLong();
+    @Autowired
+    Service<User> service;
 
-    @RequestMapping(value = "/greeting")
-    public User getUser(@RequestParam(value = "name",required = false,defaultValue = "World") String name){
-        return new User(counter.incrementAndGet(),String.format(template, name));
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
+    public User findById(@PathVariable(name = "id") int id) {
+        return service.findById(id);
     }
 }
